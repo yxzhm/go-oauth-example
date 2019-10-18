@@ -1,0 +1,9 @@
+{
+  "proto": "https",
+  "host": "",
+  "port": "443",
+  "scope": "ncs",
+  "client-id": "nmaid:",
+  "client-secret": "",
+  "redirect-url": "http://127.0.0.1:8090/callback"
+}
