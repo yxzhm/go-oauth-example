@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -37,7 +38,7 @@ func init() {
 func main() {
 	req, _ := http.NewRequest("GET", connectionConfig.ParseUrl()+HydraAuthUri, nil)
 	authCodeRequest.ParseUrlParameters(req)
-	Info.Println(req.URL.String())
+	Info.Println(fmt.Sprintf("Getting code from %s", req.URL.String()))
 
 	cook, _ := cookiejar.New(nil)
 	client := &http.Client{}
@@ -54,14 +55,16 @@ func main() {
 			rawData, _ := url.Parse(e.URL)
 			data, _ := url.ParseQuery(rawData.RawQuery)
 			code := data["code"][0]
-			Info.Println(code)
+			Info.Println(fmt.Sprintf("The code is %s", code))
 
 			// Get JWT token thru http post
 			tokenReq := NewTokenRequest(config, code)
 			res, _ := client.Post(connectionConfig.ParseUrl()+HydraTokenUri, "application/x-www-form-urlencoded", strings.NewReader(tokenReq.ParsePostData().Encode()))
 			body, _ := ioutil.ReadAll(res.Body)
-			Info.Println(string(body))
+			Info.Println(fmt.Sprintf("The JWT is %s", string(body)))
 
 		}
+	} else {
+		Info.Println(fmt.Sprintf("can't get auth code, %s", err.Error()))
 	}
 }
