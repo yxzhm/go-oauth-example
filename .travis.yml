@@ -1,6 +1,6 @@
 
 # .travis.yml
-language: minimal
+language: go
 
 
 # calls goreleaser
